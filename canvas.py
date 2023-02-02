@@ -23,9 +23,10 @@ def get_my_submissions_for_lab(lab_number):
             break
 
     my_submissions = []
+    my_students_dict = dict()
     if my_assignment and my_group:
         submissions = my_assignment.get_submissions()
-        my_students_dict = dict()
+
         for user in my_group.get_users():
             my_students_dict[user.id] = user
 

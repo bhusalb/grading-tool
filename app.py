@@ -63,7 +63,13 @@ def get_c_code_from_server(lab, paw_print):
 @app.route('/update-grade', methods=['POST'])
 def update_grade():
     data = request.get_json()
-    canvas.update_grade(data)
+    submission = canvas.update_grade(data)
+
+    return jsonify({
+        'grade': submission.grade,
+        'comments': submission.submission_comments if hasattr(submission, 'submission_comments') else [],
+        'graded_at': submission.graded_at
+    })
 
 
 if __name__ == '__main__':
