@@ -53,7 +53,7 @@ python3 -m venv /path/to/new/virtual/environment
 pip install -r requirements.txt
 ```
 
-4. Add environmental variables. There is **.env_sample** in root directory. It has all the requirement env variables list and update .env file your credentials and other details.
+4. Add environmental variables. There is **.env_sample** in root directory. It has all the required env variables list. Update .env file with your credentials and other details.
 ```
 cp .env_sample .env
 ```
