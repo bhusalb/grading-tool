@@ -1,7 +1,7 @@
 ## Grading tool made for cs 1050 course.
 
 ## Installation
-The tool is based on python flask and vanilla js. In order install tool, you need to follow belows steps.
+The tool is based on python flask and vanilla js. In order install tool, you need to follow belows steps. This depends upon **backup.sh** tool. If you don't have that on tc.rnet.missouri.edu, it won't work as intended.
 
 1. Make a virtual environment.
 
@@ -52,6 +52,14 @@ python3 -m venv /path/to/new/virtual/environment
 ```
 pip install -r requirements.txt
 ```
+
+4. Add environmental variables. There is **.env_sample** in root directory. It has all the requirement env variables list and update .env file your credentials and other details.
+```
+cp .env_sample .env
+```
+
+
+
 
 That's all for installation
 
