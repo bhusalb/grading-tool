@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+    <div id="lab_number_form" class="row justify-content-end">
+        <div class="col-4"></div>
+
+        <div class="col-4">
+            <form method="get" action="/make-backup">
+
+
+                <select name="lab_number" class="form-select form-select-lg mb-3" aria-label="Select a lab number"
+                        onchange="change_href(this.value)">
+                    <option selected>Select a lab number</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                </select>
+
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary col-4">Make Backup</button>
+
+                        <a id="start-grading" href="" type="button" class="btn btn-success col-4" style="float: right;">Start
+                            Grading</a>
+                    </div>
+
+                </div>
+
+
+            </form>
+        </div>
+
+        <div class="col-4"></div>
+
+    </div>
+
+
+    <script>
+        function change_href(value) {
+            $('#start-grading').attr("href", `/lab/${value}/grading`)
+        }
+    </script>
+
+{% endblock %}

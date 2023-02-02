@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div>
+        <h2 class="display-6 text-center">{{ assignment_name }}</h2>
+    </div>
+
+    <div>
+        <button id="previous" type="button" class="btn btn-primary">Previous</button>
+        <button id="next" type="button" class="btn btn-primary">Next</button>
+
+    </div>
+
+    <div class="row" id="template" type="x-tmpl-mustache" style="display:none;">
+        <div class="col-2">
+
+        </div>
+        <div class="col-8">
+            <pre><code class="langauge">[[{ code }]]</code>
+
+            </pre>
+
+        </div>
+        <div class="col-2">
+            <p class="h6">Name: [[ name ]] </p>
+            <p class="h6">Pawprint: [[ pawprint ]]</p>
+            <p class="h6">Previous Grade: [[ grade ]]</p>
+            <p class="h6">Previous Grade At: [[ grade_at ]]</p>
+
+            <form class="row g-3">
+
+                <div class="col-auto">
+                    <input type="text" class="form-control" id="grade_field" placeholder="Grade" value="[[ grade ]]"
+                           onchange="grade_change(this.value)">
+                </div>
+                <div class="col-auto">
+
+                    <textarea type="text" class="form-control" id="comment_field" placeholder="Comment"
+                              onchange="comment_change(this.value)" rows="8"></textarea>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-3" onclick="submit_grade()">Submit</button>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+
+    <div class="row" id="target"></div>
+
+
+
+    <script>
+        let current_index = 0
+        let my_submissions = {{ my_submissions | tojson }}
+
+            function load_code() {
+                if (my_submissions && my_submissions.length) {
+                    let submission = my_submissions[current_index]
+                    fetch(`/lab/{{ lab_id }}/code/${submission.pawprint}`).then(res => res.json())
+                        .then(
+                            ({output}) => {
+                                submission.code = hljs.highlight(output, {language: 'c'}).value
+                                render(submission)
+                            }
+                        )
+                }
+            }
+
+        load_code()
+
+        $('#next').click(() => {
+            if (current_index < my_submissions.length - 1) {
+                current_index++
+                load_code()
+            } else {
+                alert("You couldn't do next.")
+            }
+
+        })
+
+        $('#previous').click(() => {
+            if (current_index > 0) {
+                current_index--
+                load_code()
+            } else {
+                alert("You couldn't do previous.")
+            }
+
+        })
+
+        function grade_change(new_grade) {
+            my_submissions[current_index].new_grade = new_grade
+        }
+
+        function comment_change(new_comment) {
+            my_submissions[current_index].new_comment = new_comment
+        }
+
+        function submit_grade() {
+            fetch('/update-grade', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(my_submissions[current_index]) // body data type must match "Content-Type" header
+            });
+        }
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"
+            integrity="sha512-fm9r9IVGmRs5y1JUf9jqTFf8PQDa3mIOrRHrPkK4025zimArnibUXu22aB8c7iD2goBeZK2fzL366wy2PftBYw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+
+        function render(submission) {
+            Mustache.tags = ['[[', ']]'];
+            const template = document.getElementById('template').innerHTML;
+            Mustache.parse(template)
+            const rendered = Mustache.render(template, submission);
+            document.getElementById('target').innerHTML = rendered;
+        }
+    </script>
+
+    <script>
+
+    </script>
+
+{% endblock %}
