@@ -1,7 +1,7 @@
 ## Grading tool made for cs 1050 course.
 
 ## Installation
-The tool is based on python flask and vanilla js. In order install tool, you need to follow belows steps. This depends upon **backup.sh** tool. If you don't have that on tc.rnet.missouri.edu, it won't work as intended.
+The tool is based on python flask and vanilla js.This depends upon **backup.sh** tool. If you don't have that on tc.rnet.missouri.edu, it won't work as intended. In order install tool, you need to follow belows steps.
 
 1. Make a virtual environment.
 
