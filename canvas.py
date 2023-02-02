@@ -34,6 +34,14 @@ def get_my_submissions_for_lab(lab_number):
             if submission.user_id in my_students_dict:
                 my_submissions.append(submission)
 
+        sections = course.get_sections()
+
+        for section in sections:
+            enrollments = section.get_enrollments()
+            for enrollment in enrollments:
+                if enrollment.user_id in my_students_dict:
+                    my_students_dict[enrollment.user_id].section = section.name
+
     return my_submissions, my_students_dict, my_assignment
 
 

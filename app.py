@@ -10,6 +10,8 @@ app = Flask(__name__)
 
 ssh_client = ssh.connect()
 
+SERVER_WORKING_DIR = os.getenv('SERVER_WORKING_DIR')
+
 
 @app.route('/')
 def index():
@@ -19,7 +21,7 @@ def index():
 @app.route('/make-backup', methods=['GET'])
 def make_backup():
     args = request.args.to_dict()
-    stdin, stdout, stderr = ssh_client.exec_command(f'~/backup.sh lab{args["lab_number"]}')
+    stdin, stdout, stderr = ssh_client.exec_command(f'{SERVER_WORKING_DIR}/backup.sh lab{args["lab_number"]}')
 
     output = stdout.read().decode('ASCII').replace('\n', '<br>')
     return render_template('backup.html', output=output, lab_number=args["lab_number"])
@@ -39,7 +41,8 @@ def grading(lab_id):
                 'assignment_id': submission.assignment_id,
                 'course_id': submission.course_id,
                 'grade': submission.grade,
-                'grade_at': submission.graded_at,
+                'graded_at': submission.graded_at,
+                'section': my_students_dict[submission.user_id].section,
                 'id': submission.id,
             }
         )
@@ -55,7 +58,7 @@ def dev():
 
 @app.route('/lab/<int:lab>/code/<paw_print>', methods=['GET'])
 def get_c_code_from_server(lab, paw_print):
-    stdin, stdout, stderr = ssh_client.exec_command(f'cat cs1050_local_labs/lab{lab}_backup/{paw_print}/*')
+    stdin, stdout, stderr = ssh_client.exec_command(f'cat {SERVER_WORKING_DIR}/cs1050_local_labs/lab{lab}_backup/{paw_print}/*')
     output = stdout.read().decode('ASCII')
     return jsonify(dict(output=output))
 
